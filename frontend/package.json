@@ -1,0 +1,32 @@
+{
+  "name": "frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "clean": "node scripts/dev-clean.mjs",
+    "dev": "node scripts/dev-clean.mjs && next dev",
+    "dev:turbo": "node scripts/dev-clean.mjs && next dev --turbopack",
+    "dev:clean": "node scripts/dev-clean.mjs && next dev",
+    "build": "node scripts/dev-clean.mjs && next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "lucide-react": "^0.511.0",
+    "next": "^15.5.18",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "recordrtc": "^5.6.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.18",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

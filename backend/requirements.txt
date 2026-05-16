@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+chromadb
+langchain
+langchain-community
+langchain-core
+langchain-huggingface
+sentence-transformers
+groq
+python-dotenv
+requests
+websockets
+deepgram-sdk
+numpy
+pandas
