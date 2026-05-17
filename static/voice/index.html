@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SHL Assessment Recommender — Voice</title>
+    <link rel="stylesheet" href="/static/voice/voice.css" />
+  </head>
+  <body>
+    <div class="wrap">
+      <section class="hero">
+        <div>
+          <span class="badge">HR Copilot</span>
+          <h1>Hello, I'm Nova.</h1>
+          <p id="hero-desc">
+            One tap connects you. Speak naturally; I respond when you pause.
+          </p>
+        </div>
+        <div class="mic-col">
+          <div class="led-row">
+            <span id="led" class="led"></span>
+            <span id="led-label">Offline</span>
+          </div>
+          <button type="button" id="mic-btn" class="mic-btn" aria-label="Connect microphone">
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="9" y="3" width="6" height="11" rx="3" fill="#7A3ACA" />
+              <path d="M6 11a6 6 0 0012 0M12 17v4" stroke="#7A3ACA" stroke-width="2" stroke-linecap="round" />
+            </svg>
+          </button>
+          <span id="mic-status" class="mic-status">Tap to connect</span>
+        </div>
+      </section>
+
+      <div id="live-transcript" class="live-box"></div>
+
+      <div id="chat" class="chat"></div>
+
+      <section id="rec-section" class="rec-section" style="display: none">
+        <h3>Assessment shortlists by role</h3>
+        <div id="rec-scroll" class="rec-scroll"></div>
+      </section>
+
+      <div id="error" class="error"></div>
+
+      <div class="toolbar">
+        <input id="text-input" type="text" placeholder="Or type your hiring requirement…" />
+        <button type="button" id="send-text" class="btn-primary">Send</button>
+        <button type="button" id="reset-btn" class="btn-ghost">Reset</button>
+      </div>
+    </div>
+    <script src="/static/voice/voice-app.js"></script>
+  </body>
+</html>

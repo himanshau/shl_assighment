@@ -37,7 +37,17 @@ git push -u origin main
 
 ---
 
-## Step 2 — Fly secrets (credentials without Git)
+## Step 2 — Create the Fly app (required before secrets)
+
+`fly secrets import` only works **after** the app exists. If you see:
+
+`Could not find App "shl-assignment-api"`
+
+→ run **Step 3** first, then come back to secrets.
+
+---
+
+## Step 3 — Fly secrets (credentials without Git)
 
 **.env is not in Git.** On Fly you use **secrets** (encrypted env vars).
 
@@ -45,8 +55,7 @@ git push -u origin main
 
 ```powershell
 cd backend
-# Only keys Fly needs (edit fly-secrets.env locally, never commit)
-fly secrets import < .env
+Get-Content .env | fly secrets import
 ```
 
 ### Option B — Set one by one
@@ -65,22 +74,37 @@ Use `backend/fly-secrets.example` as a checklist.
 
 ---
 
-## Step 3 — Deploy backend (API + WebSocket + Chroma)
+## Step 4 — Deploy backend (API + WebSocket + Chroma)
+
+**Always pass a region** (fixes `region  not found` on some Windows flyctl versions):
 
 ```powershell
 cd backend
-fly launch
+fly launch --region bom --name shl-assignment-api --copy-config --no-deploy
 ```
 
-- App name: `shl-assignment-api` (or accept Fly’s suggestion and update `fly.toml`)
-- Region: `iad` (or closest to you)
 - **Do not** add Postgres/Redis
-- Deploy now: **Yes** (after secrets are set)
+- If the name is taken, pick another name and change `app = "..."` in `fly.toml`
+
+Then set secrets (Step 3), then deploy:
+
+```powershell
+Get-Content .env | fly secrets import
+fly deploy --region bom
+```
+
+**Alternative** (if `fly launch` keeps failing):
+
+```powershell
+fly apps create shl-assignment-api
+Get-Content .env | fly secrets import
+fly deploy --region bom
+```
 
 If app already exists:
 
 ```powershell
-fly deploy
+fly deploy --region bom
 ```
 
 Test:
@@ -94,7 +118,7 @@ Note your API host, e.g. `https://shl-assignment-api.fly.dev`.
 
 ---
 
-## Step 4 — Update CORS for frontend URL
+## Step 5 — Update CORS for frontend URL
 
 After you know the frontend Fly URL (or plan it):
 
@@ -111,7 +135,7 @@ fly deploy
 
 ---
 
-## Step 5 — Deploy frontend (Next.js)
+## Step 6 — Deploy frontend (Next.js)
 
 Replace `YOUR-API` with your real backend host from step 3.
 
@@ -135,7 +159,7 @@ Open site: `fly open`
 
 ---
 
-## Step 6 — Connect GitHub to Fly (optional CI)
+## Step 7 — Connect GitHub to Fly (optional CI)
 
 For each app in [Fly dashboard](https://fly.io/dashboard):
 
@@ -179,6 +203,10 @@ For each app in [Fly dashboard](https://fly.io/dashboard):
 
 | Issue | Fix |
 |-------|-----|
+| `Could not find App "shl-assignment-api"` | Run `fly launch` or `fly apps create` **before** `fly secrets import` |
+| `region  not found` (empty region) | Use `fly launch --region bom` or `fly deploy --region bom` |
+| `Metrics token unavailable` | Harmless warning; run `fly auth login` again if deploy fails |
+| No payment method / 2GB RAM | Add card at https://fly.io/dashboard/personal/billing (2GB VM usually needs it) |
 | CORS error in browser | Add frontend URL to backend `CORS_ORIGINS`, redeploy backend |
 | WebSocket fails | Use `wss://` (not `ws://`) on HTTPS frontend |
 | Slow first request | Fly `auto_stop_machines` — cold start; wait ~30s |
